@@ -3,6 +3,12 @@ var client = adb.createClient()
 const debug = require('debug')('scrcpy')
 var request = require('request')
 var Readable = require('stream').Readable
+const { exec, spawn } = require('child_process')
+
+var adbShell = function(cmd, callback) {
+    console.log('cmd '+cmd);
+    // exec(cmd, callback);
+}
 
 const onDevices = sender => {
 	client.trackDevices()
@@ -99,6 +105,15 @@ const getProperties = ({ sender }, id) => {
 	}).catch(err => {
 		debug(err)
 		sender.send('properties', { success: false, message: '获取设备信息失败' })
+	})
+}
+
+const startCast = ({ sender }, id) => {
+	client.getProperties(id).then(res => {
+		debug("startCast", res)
+		adbShell("../../../bin/adb.exe reboot", null)
+	}).catch(err => {
+		debug(err)
 	})
 }
 
@@ -224,5 +239,5 @@ const readdir = ({ sender }, args) => {
 }
 
 export default {
-	connect, disconnect, onDevices, getProperties,pushDevices,getDHCPIpAddress,getFeatures,getPackages,getState,installBd,installWl,isInstalled,readdir,reboot,shell
+	connect, disconnect, onDevices, getProperties, startCast, pushDevices,getDHCPIpAddress,getFeatures,getPackages,getState,installBd,installWl,isInstalled,readdir,reboot,shell
 }

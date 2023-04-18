@@ -57,6 +57,7 @@
 					<el-button class="item-remove" type="primary" @click="getFeaturesNow()"  size="small">设备硬件</el-button>
 					<el-button class="item-remove" type="primary" @click="getPackagesNow()"  size="small">包列表</el-button>
 					<el-button class="item-remove" type="primary" @click="reboot()"  size="small">重启设备</el-button>
+					<el-button class="item-remove" type="primary" @click="startCast()"  size="small">开启投屏</el-button>
 				</el-row>
 				<el-divider content-position="left">shell</el-divider>
 				<el-row style="margin-bottom:15px" :gutter="10">
@@ -302,8 +303,8 @@ import Management from '@/components/dashboard/Management'
 import Macburn from '@/components/dashboard/Macburn'
 import Regular from '@/utils/regular'
 import { ipcRenderer } from 'electron'
-const usb = require('usb')
-const { SerialPort } = require('serialport')
+
+
 export default {
 	name: 'Dashboard',
 	data() {
@@ -357,17 +358,7 @@ export default {
 		wired:""
 	},
 	mounted(){
-		// this.getHid()
-		// let _this = this
-		// usb.usb.on('attach', function(device) {
-		// 	_this.getHid()
-		// 	console.log("插进去");
-		// 	JSON.stringify
-		// });
-		// usb.usb.on('detach', function(device) { 
-		// 	_this.getHid()
-		// 	console.log("拔出来");
-		// });
+
 	},
 	created(){
 		ipcRenderer.on('properties', (event, _properties) => {
@@ -562,6 +553,9 @@ export default {
 		},
 		reboot(){
 			ipcRenderer.send('reboot', this.currentDevices[this.radioNow].id) //设备的属性
+		},
+		startCast(){
+			ipcRenderer.send('startCast', this.currentDevices[this.radioNow].id) //设备的属性
 		},
 		//获取信息
 		getData(){

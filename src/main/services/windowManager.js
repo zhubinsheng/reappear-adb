@@ -6,9 +6,7 @@ import hid from '../hid/hid'
 import config from '@config'
 import setIpc from './ipcMain'
 import { winURL, loadingURL } from '../config/StaticPath'
-// const usbDetect = require('usb-detection')
-const usb = require('usb')
-// usbDetect.startMonitoring();
+
 var loadWindow = null
 var mainWindow = null
 setIpc.Mainfunc(config.IsUseSysTitle)
@@ -23,8 +21,8 @@ function createMainWindow() {
     width: 955,
 		minHeight: 605,
     minWidth: 955,
-    maxHeight: 605,
-    maxWidth: 955,
+    maxHeight: 1080,
+    maxWidth: 1920,
     show: false,
     // title: 'YLicense',
     icon: `${__static}/icons/u15.png`,
@@ -69,9 +67,7 @@ function createMainWindow() {
     if (process.env.NODE_ENV === 'development' || config.build.devTools) mainWindow.webContents.openDevTools(true)
     if (config.UseStartupChart) loadWindow.destroy()
     adb.onDevices(mainWindow.webContents)
-    // usbDetect.on('change',(device)=>{ 
-    //   console.log('拔插了！', device); 
-    // });
+
     
     ipcMain.on('connect', adb.connect)
     ipcMain.on('getProperties', adb.getProperties)
@@ -79,6 +75,8 @@ function createMainWindow() {
     ipcMain.on('pushDevices', adb.pushDevices)
     ipcMain.on('getFeatures', adb.getFeatures)
     ipcMain.on('reboot', adb.reboot)
+    ipcMain.on('startCast', adb.startCast)
+
     ipcMain.on('getPackages', adb.getPackages)
     ipcMain.on('shell', adb.shell)
     ipcMain.on('getState', adb.getState)
